@@ -1,6 +1,6 @@
-# mathematics behind the spinning cube
+# maths behind
 
-this document explains the basic mathematics used in the spinning cube script
+this document explains the basic mathematics used in cube.all concept
 
 ## three dimensional coordinates
 
@@ -20,15 +20,27 @@ when rotating around the x axis the x coordinate stays the same while y and z co
 new y equals old y times cosine of angle minus old z times sine of angle
 new z equals old y times sine of angle plus old z times cosine of angle
 
+y' = y * cos(θ) - z * sin(θ)
+z' = y * sin(θ) + z * cos(θ)
+x' = x
+
 ### rotation around y axis  
 when rotating around the y axis the y coordinate stays the same while x and z coordinates change
 new x equals old x times cosine of angle plus old z times sine of angle
 new z equals negative old x times sine of angle plus old z times cosine of angle
 
+x' = x * cos(θ) + z * sin(θ)
+z' = -x * sin(θ) + z * cos(θ)
+y' = y
+
 ### rotation around z axis
 when rotating around the z axis the z coordinate stays the same while x and y coordinates change
 new x equals old x times cosine of angle minus old y times sine of angle
 new y equals old x times sine of angle plus old y times cosine of angle
+
+x' = x * cos(θ) - y * sin(θ)
+y' = x * sin(θ) + y * cos(θ)
+z' = z
 
 ## perspective projection
 
@@ -39,8 +51,12 @@ screen x equals three d x times factor times scale plus screen width divided by 
 screen y equals three d y times factor times scale plus screen height divided by two
 
 where factor equals distance divided by distance plus three d z
-distance is set to five units
-scale is set to two hundred
+distance is set to eight units
+scale is set to one hundred fifty
+
+factor = distance / (distance + z)
+screen_x = x * factor * scale + width / 2
+screen_y = y * factor * scale + height / 2
 
 the factor creates perspective by making objects farther away appear smaller
 the distance parameter controls the field of view
@@ -61,7 +77,12 @@ new red equals color one red times one minus factor plus color two red times fac
 new green equals color one green times one minus factor plus color two green times factor
 new blue equals color one blue times one minus factor plus color two blue times factor
 
-color index increases by zero point zero two each frame
+factor = color_index - floor(color_index)
+r = color1_r * (1 - factor) + color2_r * factor
+g = color1_g * (1 - factor) + color2_g * factor
+b = color1_b * (1 - factor) + color2_b * factor
+
+color index increases by zero point zero zero two each frame
 when color index reaches the number of colors it resets to zero
 
 ## animation mathematics
@@ -69,21 +90,30 @@ when color index reaches the number of colors it resets to zero
 the animation works by continuously updating rotation angles and color index
 
 rotation angles increase by small amounts each frame
-- x angle increases by zero point zero two radians
-- y angle increases by zero point zero one five radians  
-- z angle increases by zero point zero one radians
+- x angle increases by zero point zero zero three radians
+- y angle increases by zero point zero zero two radians  
+- z angle increases by zero point zero zero one five radians
 
-color index increases by zero point zero two each frame
+angle_x += 0.003
+angle_y += 0.002
+angle_z += 0.0015
+
+color index increases by zero point zero zero two each frame
 when color index reaches the number of colors it resets to zero
 
-the frame rate is controlled by pygame clock at sixty frames per second
+the frame rate is controlled by requestAnimationFrame at sixty frames per second
 
 ## user interaction mathematics
 
 keyboard controls allow manual rotation adjustment
-left arrow decreases y angle by zero point zero five radians
-right arrow increases y angle by zero point zero five radians
-up arrow decreases x angle by zero point zero five radians
-down arrow increases x angle by zero point zero five radians
+left arrow decreases y angle by zero point zero one radians
+right arrow increases y angle by zero point zero one radians
+up arrow decreases x angle by zero point zero one radians
+down arrow increases x angle by zero point zero one radians
+
+if left_arrow: angle_y -= 0.01
+if right_arrow: angle_y += 0.01
+if up_arrow: angle_x -= 0.01
+if down_arrow: angle_x += 0.01
 
 these manual adjustments are added to the automatic rotation values
