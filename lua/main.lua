@@ -87,7 +87,7 @@ function drawCube()
     end
 end
 function love.load()
-    love.window.setTitle("Spinning Cube")
+    love.window.setTitle("cube.all")
     love.window.setMode(800, 600, {resizable = false, borderless = true})
 end
 function love.update(dt)
